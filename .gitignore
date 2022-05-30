@@ -1,0 +1,8 @@
+
+
+Attention! Important ways to ignore! Do not delete!
+/main-server/configs
+./main-server/configs
+
+/main-server/.env
+./main-server/.env
