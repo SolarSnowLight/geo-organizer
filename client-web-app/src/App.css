@@ -1,0 +1,19 @@
+.map-container{
+    height: 100vh;
+    width: 100%;
+    z-index: 1;
+}
+.info{
+    display: table;
+    position: absolute;
+    word-wrap: anywhere;
+    white-space: pre-wrap;
+    padding: 10px;
+    border: none;
+    border-radius: 3px;
+    font-size: 12px;
+    text-align: center;
+    color: #222;
+    background: #fff;
+    z-index: 999;
+}
