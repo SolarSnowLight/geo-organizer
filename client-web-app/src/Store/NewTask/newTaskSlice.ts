@@ -6,7 +6,7 @@ export interface NewTaskState {
   temporary: boolean;
   date?: Date | undefined;
   weekDay?: string[] | undefined;
-  time: string | undefined;
+  time: string;
 }
 
 const initialState: NewTaskState = {
@@ -15,7 +15,7 @@ const initialState: NewTaskState = {
   temporary: false,
   date: undefined,
   weekDay: undefined,
-  time: undefined,
+  time: '00:00',
 };
 
 export const newTaskSlice = createSlice({
@@ -52,7 +52,7 @@ export const newTaskSlice = createSlice({
       temporary: false,
       date: undefined,
       weekDay: undefined,
-      time: undefined,
+      time: '00:00',
     }),
   },
 });

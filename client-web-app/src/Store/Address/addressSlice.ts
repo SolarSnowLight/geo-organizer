@@ -11,7 +11,6 @@ export interface AddressState {
 const initialState: AddressState = {
   data: undefined,
 };
-const token = 'pk.eyJ1IjoiaW5ub2tlbnRpeTI1MTciLCJhIjoiY2wwdHRicHd2MHAxZjNibm1odTdwNXk1cCJ9.aibsBxys2tKJkN25qkCAKg';
 
 export const addressSlice = createSlice({
   name: 'address',
@@ -37,7 +36,7 @@ export const fetchAddress = createAsyncThunk('address/fetchAddress', async (latl
   dispatch(addMarker(latlng));
   try {
     const response = await axios.get<GeocodeType>(
-      `https://api.mapbox.com/geocoding/v5/mapbox.places/${latlng.longitude},${latlng.latitude}.json?access_token=${token}`,
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${latlng.longitude},${latlng.latitude}.json?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`,
     );
     dispatch(addAddress(response.data));
   } catch (e) {

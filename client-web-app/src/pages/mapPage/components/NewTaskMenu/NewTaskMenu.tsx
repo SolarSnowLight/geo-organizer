@@ -9,27 +9,67 @@ import Clock from './components/Clock';
 import WeekDayPicker from './components/WeekDayPicker';
 import Calendar from './components/Calendar';
 import useActions from '../../../../Store/hooks/useActions';
+import { BarEnum } from '../../../../Store/App/appSlice';
 
 function NewTaskMenu() {
   const { data } = useTypedSelector((state) => state.address);
-  const { temporary, title, description } = useTypedSelector((state) => state.newTask);
+  const state = useTypedSelector((state) => state.newTask);
+  const { temporary, title, description } = useTypedSelector(
+    (state) => state.newTask,
+  );
   const address: string = getAddress(data);
   const {
-    setTitle, setDescription, setTemporary, resetState,
+    setTitle,
+    setDescription,
+    setTemporary,
+    resetState,
+    setBar,
+    addTask,
+    deleteAddress,
+    deleteMarker,
   } = useActions();
-  useEffect((() => { resetState(); }), []);
+  useEffect(() => {
+    resetState();
+  }, []);
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
   const handleDescChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDescription(e.target.value);
   };
+  const handleCancelClick = () => {
+    setBar(BarEnum.TASK_LIST);
+    deleteMarker();
+    deleteAddress();
+  };
+  const handleCreateClick = () => {
+    if (data) {
+      addTask({
+        longitude: data.query[0],
+        latitude: data.query[1],
+        title: state.title,
+        description: state.description,
+        date: state.date,
+        weekDay: state.weekDay,
+        temporary: state.temporary,
+        id: new Date().toString(),
+        time: state.time,
+      });
+      setBar(BarEnum.TASK_LIST);
+      deleteMarker();
+      deleteAddress();
+    }
+  };
   return (
     <div className="taskbar newTaskMenu">
       <img src={logo} alt="Logo" />
       <h1>Создание метки</h1>
       <h2>{address}</h2>
-      <input value={title} placeholder="Название" onChange={handleTitleChange} />
+      <input
+        value={title}
+        placeholder="Название"
+        onChange={handleTitleChange}
+      />
       <input
         value={description}
         placeholder="Описание"
@@ -58,8 +98,14 @@ function NewTaskMenu() {
         <Clock />
       </div>
       <div className={s.newTaskMenu__buttonWrapper}>
-        <button type="button" onClick={resetState}>Отмена</button>
-        <button type="button" className={s.newTaskMenu__buttonWrapper_create}>
+        <button type="button" onClick={handleCancelClick}>
+          Отмена
+        </button>
+        <button
+          type="button"
+          className={s.newTaskMenu__buttonWrapper_create}
+          onClick={handleCreateClick}
+        >
           Создать
         </button>
       </div>
