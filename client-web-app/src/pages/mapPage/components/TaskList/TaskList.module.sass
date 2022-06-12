@@ -1,0 +1,100 @@
+.taskbar
+  //position: fixed
+  z-index: 2
+  height: 100vh
+  background: #FBFBFB
+  width: 407px
+  min-width: 407px
+  display: flex
+  flex-direction: column
+  align-items: center
+  padding: 64px 32px 32px
+  -webkit-box-sizing: border-box
+  -moz-box-sizing: border-box
+  box-sizing: border-box
+  box-shadow: 4px 0 23px rgba(0, 0, 0, 0.25)
+
+  img
+    height: 43px
+    width: 43px
+    margin-bottom: 24px
+    filter: drop-shadow(0px 3px 8px rgba(0, 0, 0, 0.25))
+
+  h1
+    font-size: 24px
+    line-height: 24px
+    font-weight: 500
+    margin-block: 0
+    margin-bottom: 24px
+
+.search-input
+  background: transparent
+  border: 1px solid #9B9B9B
+  width: 343px
+  height: 40px
+  display: flex
+  align-items: center
+  border-radius: 30px
+  padding: 8px 16px
+  box-sizing: border-box
+  -webkit-box-sizing: border-box
+  -moz-box-sizing: border-box
+  margin-bottom: 24px
+
+  button
+    background: transparent
+    border: none
+    outline: none
+    display: flex
+    align-content: center
+    flex-direction: row
+    width: 24px
+    height: 24px
+    margin-right: 10px
+    padding: 0
+
+    img
+      width: 24px
+      height: 24px
+      margin-bottom: 0
+
+  input
+    background: transparent
+    border: none
+    outline: none
+    font-size: 18px
+    line-height: 18px
+    font-weight: 400
+    padding: 0
+
+.tabs-switch
+  display: grid
+  align-items: center
+  width: 343px
+  height: 40px
+  background: #E8EAED
+  border-radius: 52px
+  justify-content: space-around
+  box-sizing: border-box
+  margin-bottom: 24px
+
+  &__item
+    background: transparent
+    border: none
+    outline: none
+    font-size: 16px
+    line-height: 16px
+    font-weight: 400
+    height: 32px
+    border-radius: 52px
+    box-sizing: border-box
+    padding: 8px
+
+    &:hover
+      cursor: pointer
+
+.taskitem
+  &__wrapper
+    width: 100%
+    background: #E8EAED
+    border-radius: 8px

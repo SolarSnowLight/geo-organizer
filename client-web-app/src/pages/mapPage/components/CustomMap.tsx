@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Map, {
   MapboxEvent,
   MapLayerMouseEvent,
@@ -22,8 +22,13 @@ function CustomMap() {
   const { bar } = useTypedSelector((state) => state.app);
   const { data } = useTypedSelector((state) => state.address);
   const tasks = useTypedSelector((state) => state.tasks.data);
-  const { fetchAddress, deleteMarker, deleteAddress } = useActions();
+  const {
+    fetchAddress, deleteMarker, deleteAddress, fetchTasks,
+  } = useActions();
   const [popup, setPopup] = useState<GeocodeType>();
+  useEffect(() => {
+    fetchTasks();
+  }, []);
   const handleMapClick = (e: MapLayerMouseEvent) => {
     switch (bar) {
       case BarEnum.NEW_TASK: {
@@ -96,6 +101,12 @@ function CustomMap() {
             longitude={tasks.longitude}
             latitude={tasks.latitude}
           >
+            <span style={{
+              position: 'absolute', fontSize: 16, zIndex: 3, top: '12%', transform: 'translateX(-50%)', left: '50%', whiteSpace: 'nowrap',
+            }}
+            >
+              {tasks.title}
+            </span>
             <Pin />
           </Marker>
         ))}

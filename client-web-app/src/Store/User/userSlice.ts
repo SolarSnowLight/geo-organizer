@@ -8,7 +8,7 @@ export interface UserState {
 }
 
 const initialState: UserState = {
-  isLoggedIn: false,
+  isLoggedIn: true,
   access_token: null,
   refresh_token: null,
 };

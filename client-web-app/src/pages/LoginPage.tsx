@@ -23,7 +23,7 @@ function LoginPage() {
     }
   }, [isLoggedIn]);
   const validationSchema = yup.object().shape({
-    email: yup.string().required('Введите e-mail'),
+    email: yup.string().email().required('Введите e-mail'),
     password: yup.string().required('Введите пароль'),
   });
   const {

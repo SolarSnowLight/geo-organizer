@@ -5,7 +5,7 @@ import markerReducer, { markerSlice } from './Marker/markerSlice';
 import addressReducer, { addressSlice, fetchAddress } from './Address/addressSlice';
 import newTaskReducer, { newTaskSlice } from './NewTask/newTaskSlice';
 import appReducer, { appSlice } from './App/appSlice';
-import tasksReducer, { tasksSlice } from './Tasks/tasksSlice';
+import tasksReducer, { fetchTasks, tasksSlice } from './Tasks/tasksSlice';
 import userReducer, { signIn, signUp } from './User/userSlice';
 
 const addressActions = addressSlice.actions;
@@ -23,6 +23,7 @@ export const ActionCreators = {
   fetchAddress,
   signUp,
   signIn,
+  fetchTasks,
 };
 
 const rootReducer = combineReducers({

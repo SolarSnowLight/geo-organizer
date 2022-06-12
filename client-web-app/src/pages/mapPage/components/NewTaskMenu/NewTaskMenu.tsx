@@ -54,6 +54,7 @@ function NewTaskMenu() {
         temporary: state.temporary,
         id: new Date().toString(),
         time: state.time,
+        completed: false,
       });
       setBar(BarEnum.TASK_LIST);
       deleteMarker();
