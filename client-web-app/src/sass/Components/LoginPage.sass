@@ -1,0 +1,61 @@
+.login-container
+  position: fixed
+  left: 50%
+  top: 21%
+  transform: translateX(-50%)
+  display: flex
+  flex-direction: column
+  align-items: center
+  width: 343px
+  img
+    filter: drop-shadow(0px 3px 8px rgba(0, 0, 0, 0.25))
+  &__logo
+    font-size: 72px
+    line-height: 72px
+    margin: 0 0 76px 0
+    color: #85EBA2
+    text-shadow: 1px 1px white, -1px -1px #444
+  a
+    font-size: 15px
+    font-weight: 500
+    cursor: pointer
+
+.form-container
+  display: flex
+  flex-direction: column
+  align-items: flex-start
+  width: 343px
+  margin-bottom: 10px
+  h2
+    margin: 0 0 24px 0
+    font-size: 24px
+    font-weight: 500
+  input
+    margin: 0 0 24px 0
+    height: 50px
+    width: 100%
+    border: none
+    background: #E8EAED
+    border-radius: 30px
+    padding: 16px
+    -webkit-box-sizing: border-box
+    -moz-box-sizing: border-box
+    box-sizing: border-box
+    font-size: 18px
+    font-weight: 400
+    line-height: 18px
+    opacity: 75%
+    &:focus
+      outline: none
+      box-shadow: none
+      opacity: 100%
+  button
+    border: none
+    background: #85EBA2
+    width: 100%
+    height: 50px
+    border-radius: 30px
+    padding: 16px 0
+    font-size: 18px
+    font-weight: 400
+    cursor: pointer
