@@ -1,59 +1,80 @@
 package service
 
 import (
-	"errors"
-	"main-server/pkg/model"
+	userModel "main-server/pkg/model/user"
 	"main-server/pkg/repository"
-	"time"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/spf13/viper"
 )
-
-// Константы для конфигурирования
-const (
-	salt             = "a;ugb*(AW^GFA&WTVFawtfva79wf6g7a6f2r8tc127tVIYTAWCFA&(T"
-	signingKey       = "AOgnaiouGHA()wH8WFG8uga8eya7G9g9UBA@e@h(rh@u(!"
-	tokenTTL_access  = 1 * time.Hour
-	tokenTTL_refresh = 12 * time.Hour
-)
-
-// Структура определяющая данные токена
-type tokenClaims struct {
-	jwt.StandardClaims
-	UsersId string `json:"users_id"`
-	RolesId string `json:"roles_id"`
-}
 
 // Структура репозитория
 type AuthService struct {
-	repo repository.Authorization
+	repo         repository.Authorization
+	tokenService TokenService
 }
 
 // Функция создания нового репозитория
-func NewAuthService(repo repository.Authorization) *AuthService {
-	return &AuthService{repo: repo}
+func NewAuthService(repo repository.Authorization, tokenService TokenService) *AuthService {
+	return &AuthService{
+		repo:         repo,
+		tokenService: tokenService,
+	}
 }
 
-// Создание пользователя
-func (s *AuthService) CreateUser(user model.UserRegisterModel) (model.UserAuthDataModel, error) {
+/*
+*	Create user
+ */
+func (s *AuthService) CreateUser(user userModel.UserRegisterModel) (userModel.UserAuthDataModel, error) {
 	return s.repo.CreateUser(user)
 }
 
-func (s *AuthService) LoginUser(user model.UserLoginModel) (model.UserAuthDataModel, error) {
+/*
+*	Login user
+ */
+func (s *AuthService) LoginUser(user userModel.UserLoginModel) (userModel.UserAuthDataModel, error) {
 	return s.repo.LoginUser(user)
 }
 
-func (s *AuthService) Refresh(refreshToken model.TokenRefreshModel) (model.UserAuthDataModel, error) {
-	return s.repo.Refresh(refreshToken)
+/*
+*	Login user with Google OAuth2
+ */
+func (s *AuthService) LoginUserOAuth2(code string) (userModel.UserAuthDataModel, error) {
+	return s.repo.LoginUserOAuth2(code)
 }
 
-func (s *AuthService) Logout(tokens model.TokenDataModel) (bool, error) {
+/*
+*	Refresh user
+ */
+func (s *AuthService) Refresh(data userModel.TokenLogoutDataModel, refreshToken string) (userModel.UserAuthDataModel, error) {
+	token, err := s.tokenService.ParseTokenWithoutValid(refreshToken, viper.GetString("token.signing_key_refresh"))
+
+	if err != nil {
+		return userModel.UserAuthDataModel{}, err
+	}
+
+	return s.repo.Refresh(data, refreshToken, token)
+}
+
+/*
+*	Logout user
+ */
+func (s *AuthService) Logout(tokens userModel.TokenLogoutDataModel) (bool, error) {
 	return s.repo.Logout(tokens)
 }
 
-// Функция парсинга токена
-func (s *AuthService) ParseToken(pToken, signingKey string) (model.TokenOutputParse, error) {
-	token, err := jwt.ParseWithClaims(pToken, &tokenClaims{}, func(token *jwt.Token) (interface{}, error) {
+/*
+*	Активация аккаунта
+ */
+func (s *AuthService) Activate(link string) (bool, error) {
+	return s.repo.Activate(link)
+}
+
+/*
+*	Token parsing function
+ */
+func (s *AuthService) ParseToken(pToken, signingKey string) (userModel.TokenOutputParse, error) {
+	return userModel.TokenOutputParse{}, nil
+	/*token, err := jwt.ParseWithClaims(pToken, &tokenClaims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("invalid signing method")
 		}
@@ -62,40 +83,33 @@ func (s *AuthService) ParseToken(pToken, signingKey string) (model.TokenOutputPa
 	})
 
 	if !token.Valid {
-		return model.TokenOutputParse{}, errors.New("token is not valid")
+		return userModel.TokenOutputParse{}, errors.New("token is not valid")
 	}
 
 	if err != nil {
-		return model.TokenOutputParse{}, err
+		return userModel.TokenOutputParse{}, err
 	}
 
 	// Получение данных из токена (с преобразованием к указателю на tokenClaims)
 	claims, ok := token.Claims.(*tokenClaims)
 	if !ok {
-		return model.TokenOutputParse{}, errors.New("token claims are not of type")
+		return userModel.TokenOutputParse{}, errors.New("token claims are not of type")
 	}
 
 	user, err := s.repo.GetUser("uuid", claims.UsersId)
 
 	if err != nil {
-		return model.TokenOutputParse{}, err
+		return userModel.TokenOutputParse{}, err
 	}
 
 	role, err := s.repo.GetRole("uuid", claims.RolesId)
 
 	if err != nil {
-		return model.TokenOutputParse{}, err
+		return userModel.TokenOutputParse{}, err
 	}
 
-	return model.TokenOutputParse{
+	return userModel.TokenOutputParse{
 		UsersId: user.Id,
 		RolesId: role.Id,
-	}, nil
-}
-
-func Ternary(statement bool, a, b interface{}) interface{} {
-	if statement {
-		return a
-	}
-	return b
+	}, nil*/
 }

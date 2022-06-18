@@ -7,20 +7,6 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-const (
-	usersTable        = "users"
-	usersDataTable    = "users_data"
-	usersRolesTable   = "users_roles"
-	rolesTable        = "roles"
-	rolesModulesTable = "roles_modules"
-	activationsTable  = "activations"
-	tokensTable       = "tokens"
-	todoListsTable    = "todo_lists"
-	usersListsTable   = "users_lists"
-	todoItemsTable    = "todo_items"
-	listsItemsTable   = "lists_items"
-)
-
 // Структура содержащая параметры подключения к базе данных
 type Config struct {
 	Host     string

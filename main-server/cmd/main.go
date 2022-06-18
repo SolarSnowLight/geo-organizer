@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	mainserver "main-server"
+	"main-server/configs"
 	"main-server/pkg/handler"
 	"main-server/pkg/repository"
 	"main-server/pkg/service"
@@ -17,9 +18,9 @@ import (
 	"github.com/spf13/viper"
 )
 
-// @title Geo-organizer API
+// @title MISU Main Server
 // @version 1.0
-// description API Server for Geo-organizer application
+// description Analytical core for the MISU Mirny project
 
 // @host localhost:8000
 // @BasePath /
@@ -52,6 +53,10 @@ func main() {
 		logrus.Fatalf("failed to initialize db: %s", err.Error())
 	}
 
+	// Инициализация OAuth2 сервиса авторизации
+	configs.InitOAuth2Config()
+	configs.InitVKAuthConfig()
+
 	// dependency injection
 	repos := repository.NewRepository(db)
 	service := service.NewService(repos)
@@ -65,13 +70,13 @@ func main() {
 		}
 	}()
 
-	logrus.Print("TodoApp Started")
+	logrus.Print("MISU Main Server Started")
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
 	<-quit
 
-	logrus.Print("TodoApp Shutting Down")
+	logrus.Print("MISU Main Server Shutting Down")
 
 	if err := srv.Shutdown(context.Background()); err != nil {
 		logrus.Errorf("error occured on server shutting down: %s", err.Error())

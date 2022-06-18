@@ -16,6 +16,102 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/auth/activate": {
+            "get": {
+                "description": "Активация аккаунта по почте",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Activate",
+                "operationId": "activate",
+                "responses": {
+                    "200": {
+                        "description": "data",
+                        "schema": {
+                            "$ref": "#/definitions/handler.LogoutOutputModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "description": "Выход из аккаунта",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Logout",
+                "operationId": "logout",
+                "responses": {
+                    "200": {
+                        "description": "data",
+                        "schema": {
+                            "$ref": "#/definitions/handler.LogoutOutputModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/refresh": {
             "post": {
                 "description": "Обновление токена доступа и токена обновления",
@@ -37,7 +133,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.TokenDataModel"
+                            "$ref": "#/definitions/user.TokenRefreshModel"
                         }
                     }
                 ],
@@ -45,7 +141,7 @@ const docTemplate = `{
                     "200": {
                         "description": "data",
                         "schema": {
-                            "$ref": "#/definitions/handler.LogoutOutputModel"
+                            "$ref": "#/definitions/user.TokenAccessModel"
                         }
                     },
                     "400": {
@@ -96,7 +192,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.UserLoginModel"
+                            "$ref": "#/definitions/user.UserLoginModel"
                         }
                     }
                 ],
@@ -104,7 +200,125 @@ const docTemplate = `{
                     "200": {
                         "description": "data",
                         "schema": {
-                            "$ref": "#/definitions/model.UserAuthDataModel"
+                            "$ref": "#/definitions/user.TokenAccessModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/sign-in/oauth2": {
+            "post": {
+                "description": "Авторизация пользователя через Google OAuth2",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "SignInOAuth2",
+                "operationId": "login_oauth2",
+                "parameters": [
+                    {
+                        "description": "credentials",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.GoogleOAuth2Code"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "data",
+                        "schema": {
+                            "$ref": "#/definitions/user.TokenAccessModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/sign-in/vk": {
+            "post": {
+                "description": "Авторизация пользователя через VK",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "SignInVK",
+                "operationId": "login_vk",
+                "parameters": [
+                    {
+                        "description": "credentials",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.UserLoginModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "data",
+                        "schema": {
+                            "$ref": "#/definitions/user.TokenAccessModel"
                         }
                     },
                     "400": {
@@ -155,7 +369,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.UserRegisterModel"
+                            "$ref": "#/definitions/user.UserRegisterModel"
                         }
                     }
                 ],
@@ -163,7 +377,7 @@ const docTemplate = `{
                     "200": {
                         "description": "data",
                         "schema": {
-                            "$ref": "#/definitions/model.UserAuthDataModel"
+                            "$ref": "#/definitions/user.TokenAccessModel"
                         }
                     },
                     "400": {
@@ -211,37 +425,71 @@ const docTemplate = `{
                 }
             }
         },
-        "model.TokenDataModel": {
+        "user.GoogleOAuth2Code": {
             "type": "object",
+            "required": [
+                "code"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.TokenAccessModel": {
+            "type": "object",
+            "required": [
+                "access_token"
+            ],
             "properties": {
                 "access_token": {
                     "type": "string"
-                },
-                "refresh_token": {
-                    "type": "string"
                 }
             }
         },
-        "model.TokenRefreshModel": {
+        "user.TokenRefreshModel": {
             "type": "object",
+            "required": [
+                "refresh_token"
+            ],
             "properties": {
                 "refresh_token": {
                     "type": "string"
                 }
             }
         },
-        "model.UserAuthDataModel": {
+        "user.UserJSONBModel": {
             "type": "object",
+            "required": [
+                "name",
+                "nickname",
+                "surname"
+            ],
             "properties": {
-                "access_token": {
+                "date_birth": {
                     "type": "string"
                 },
-                "refresh_token": {
+                "gender": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "patronymic": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "surname": {
                     "type": "string"
                 }
             }
         },
-        "model.UserLoginModel": {
+        "user.UserLoginModel": {
             "type": "object",
             "required": [
                 "email",
@@ -256,25 +504,21 @@ const docTemplate = `{
                 }
             }
         },
-        "model.UserRegisterModel": {
+        "user.UserRegisterModel": {
             "type": "object",
             "required": [
+                "data",
                 "email",
-                "name",
-                "password",
-                "surname"
+                "password"
             ],
             "properties": {
+                "data": {
+                    "$ref": "#/definitions/user.UserJSONBModel"
+                },
                 "email": {
                     "type": "string"
                 },
-                "name": {
-                    "type": "string"
-                },
                 "password": {
-                    "type": "string"
-                },
-                "surname": {
                     "type": "string"
                 }
             }
@@ -295,7 +539,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8000",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "Geo-organizer API",
+	Title:            "MISU Main Server",
 	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
