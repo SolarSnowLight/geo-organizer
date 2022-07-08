@@ -2,6 +2,7 @@ package handler
 
 import (
 	"errors"
+	middlewareConstants "main-server/pkg/constants/middleware"
 	"main-server/pkg/service/google_oauth2"
 	"net/http"
 	"strings"
@@ -10,17 +11,8 @@ import (
 	"github.com/spf13/viper"
 )
 
-const (
-	authorizationHeader = "Authorization"
-	usersCtx            = "users_id"
-	rolesCtx            = "roles_id"
-	authTypeValueCtx    = "auth_type_value"
-	accessTokenCtx      = "access_token"
-	tokenApiCtx         = "token_api"
-)
-
 func (h *Handler) userIdentity(c *gin.Context) {
-	header := c.GetHeader(authorizationHeader)
+	header := c.GetHeader(middlewareConstants.AUTHORIZATION_HEADER)
 
 	if header == "" {
 		newErrorResponse(c, http.StatusUnauthorized, "Пустой заголовок авторизации!")
@@ -53,15 +45,15 @@ func (h *Handler) userIdentity(c *gin.Context) {
 	}
 
 	// Добавление к контексту дополнительных данных о пользователе
-	c.Set(usersCtx, data.UsersId)
-	c.Set(rolesCtx, data.RolesId)
-	c.Set(authTypeValueCtx, data.AuthType.Value)
-	c.Set(tokenApiCtx, data.TokenApi)
-	c.Set(accessTokenCtx, headerParts[1])
+	c.Set(middlewareConstants.USER_CTX, data.UsersId)
+	c.Set(middlewareConstants.ROLES_CTX, data.RolesId)
+	c.Set(middlewareConstants.AUTH_TYPE_VALUE_CTX, data.AuthType.Value)
+	c.Set(middlewareConstants.TOKEN_API_CTX, data.TokenApi)
+	c.Set(middlewareConstants.ACCESS_TOKEN_CTX, headerParts[1])
 }
 
 func (h *Handler) userIdentityLogout(c *gin.Context) {
-	header := c.GetHeader(authorizationHeader)
+	header := c.GetHeader(middlewareConstants.AUTHORIZATION_HEADER)
 
 	if header == "" {
 		newErrorResponse(c, http.StatusUnauthorized, "Пустой заголовок авторизации!")
@@ -82,15 +74,15 @@ func (h *Handler) userIdentityLogout(c *gin.Context) {
 	}
 
 	// Добавление к контексту дополнительных данных о пользователе
-	c.Set(usersCtx, data.UsersId)
-	c.Set(rolesCtx, data.RolesId)
-	c.Set(authTypeValueCtx, data.AuthType.Value)
-	c.Set(tokenApiCtx, data.TokenApi)
-	c.Set(accessTokenCtx, headerParts[1])
+	c.Set(middlewareConstants.USER_CTX, data.UsersId)
+	c.Set(middlewareConstants.ROLES_CTX, data.RolesId)
+	c.Set(middlewareConstants.AUTH_TYPE_VALUE_CTX, data.AuthType.Value)
+	c.Set(middlewareConstants.TOKEN_API_CTX, data.TokenApi)
+	c.Set(middlewareConstants.ACCESS_TOKEN_CTX, headerParts[1])
 }
 
 func getUserId(c *gin.Context) (int, error) {
-	id, ok := c.Get(usersCtx)
+	id, ok := c.Get(middlewareConstants.USER_CTX)
 	if !ok {
 		return 0, errors.New("user id not found")
 	}

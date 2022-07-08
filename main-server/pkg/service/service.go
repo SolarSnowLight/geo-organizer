@@ -1,8 +1,11 @@
 package service
 
 import (
+	articleModel "main-server/pkg/model/article"
 	userModel "main-server/pkg/model/user"
 	"main-server/pkg/repository"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Authorization interface {
@@ -27,9 +30,17 @@ type AuthType interface {
 	GetAuthType(column, value string) (userModel.AuthTypeModel, error)
 }
 
+type User interface {
+	CreateArticle(c *gin.Context, title, text, tags string, files []articleModel.ArticlesFilesDBModel) (bool, error)
+	DeleteArticle(uuid articleModel.ArticleUuidModel, c *gin.Context) (articleModel.ArticleSuccessModel, error)
+	GetArticle(uuid articleModel.ArticleUuidModel, c *gin.Context) (articleModel.ArticleModel, error)
+	GetArticles(c *gin.Context) (articleModel.ArticlesModel, error)
+}
+
 type Service struct {
 	Authorization
 	Token
+	User
 }
 
 func NewService(repos *repository.Repository) *Service {
@@ -37,5 +48,6 @@ func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		Token:         tokenService,
 		Authorization: NewAuthService(repos.Authorization, *tokenService),
+		User:          NewUserService(repos.User),
 	}
 }

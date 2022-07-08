@@ -40,6 +40,9 @@ CREATE TABLE roles
     domains_id      int references domains (id) on delete cascade
 );
 
+INSERT INTO roles(uuid, "value", "description", users_id, domains_id) 
+VALUES('b6c3c6c3-8402-4fd1-9bff-30555a4a97da', 'USER', 'Пользователь', null, null);
+
 /* Таблица всех супер администраторов */
 CREATE TABLE super_admins
 (
@@ -73,6 +76,10 @@ CREATE TABLE modules
     domains_id      int references domains (id) on delete cascade
 );
 
+INSERT INTO modules ("value", "description", domains_id) VALUES (
+    'USER', 'Пользователь', null
+);
+
 /* Таблица связывающая роли с модулями */
 CREATE TABLE roles_modules
 (
@@ -80,6 +87,8 @@ CREATE TABLE roles_modules
     modules_id      int references modules (id) on delete cascade not null,
     roles_id        int references roles (id) on delete cascade not null
 );
+
+INSERT INTO roles_modules (modules_id, roles_id) VALUES (1, 1);
 
 /* Таблица связывающая пользователей с конкретными ролями */
 CREATE TABLE users_roles
@@ -115,6 +124,9 @@ CREATE TABLE auth_types
     uuid                varchar(36)        not null unique,
     "value"             varchar(100)       not null
 );
+
+INSERT INTO auth_types(uuid, "value") VALUES ('1d790592-5c8d-44cc-9cb9-f2bc5f68da46', 'LOCAL');
+INSERT INTO auth_types(uuid, "value") VALUES ('d03afa23-6d64-4b2e-aa4d-e69641f68b0c', 'GOOGLE');
 
 /* Таблица связывания существующих типов аутентификации с пользователями */
 CREATE TABLE users_auth_types

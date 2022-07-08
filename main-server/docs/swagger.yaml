@@ -1,5 +1,65 @@
 basePath: /
 definitions:
+  article.ArticleModel:
+    properties:
+      date_created:
+        type: string
+      files:
+        items:
+          $ref: '#/definitions/article.ArticlesFilesDBModel'
+        type: array
+      tags:
+        type: string
+      text:
+        type: string
+      title:
+        type: string
+      uuid:
+        type: string
+    required:
+    - date_created
+    - files
+    - tags
+    - text
+    - title
+    - uuid
+    type: object
+  article.ArticleSuccessModel:
+    properties:
+      success:
+        type: boolean
+    type: object
+  article.ArticleUuidModel:
+    properties:
+      uuid:
+        type: string
+    required:
+    - uuid
+    type: object
+  article.ArticlesFilesDBModel:
+    properties:
+      filename:
+        type: string
+      filepath:
+        type: string
+      files_id:
+        type: integer
+      index:
+        type: integer
+    required:
+    - filename
+    - filepath
+    - index
+    type: object
+  article.ArticlesModel:
+    properties:
+      articles:
+        items:
+          $ref: '#/definitions/article.ArticleModel'
+        type: array
+    required:
+    - articles
+    type: object
   handler.LogoutOutputModel:
     properties:
       is_logout:
@@ -340,6 +400,148 @@ paths:
       summary: SignUp
       tags:
       - auth
+  /user/article/create:
+    post:
+      consumes:
+      - application/json
+      description: Создание статьи
+      operationId: create-article
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: data
+          schema:
+            $ref: '#/definitions/article.ArticleSuccessModel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: CreateArticle
+      tags:
+      - create_article
+  /user/article/delete:
+    post:
+      consumes:
+      - application/json
+      description: Удаление статьи
+      operationId: delete-article
+      parameters:
+      - description: credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/article.ArticleUuidModel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: data
+          schema:
+            $ref: '#/definitions/article.ArticleSuccessModel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: DeleteArticle
+      tags:
+      - delete_article
+  /user/article/get:
+    post:
+      consumes:
+      - application/json
+      description: Получение подробной информации о статье
+      operationId: get-article
+      parameters:
+      - description: credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/article.ArticleUuidModel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: data
+          schema:
+            $ref: '#/definitions/article.ArticleModel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: GetArticle
+      tags:
+      - get_article
+  /user/article/get/all:
+    post:
+      consumes:
+      - application/json
+      description: Получение списка статей
+      operationId: get-articles
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: data
+          schema:
+            $ref: '#/definitions/article.ArticlesModel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: GetArticles
+      tags:
+      - get_articles
 securityDefinitions:
   ApiKeyAuth:
     in: header
