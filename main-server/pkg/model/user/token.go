@@ -1,4 +1,4 @@
-package model
+package user
 
 type TokenModel struct {
 	Id           int    `json:"id" db:"id"`
@@ -12,9 +12,18 @@ type TokenDataModel struct {
 	RefreshToken string `json:"refresh_token"`
 }
 
+type TokenLogoutDataModel struct {
+	AccessToken   string  `json:"access_token"`
+	TokenApi      *string `json:"token_api"`
+	RefreshToken  string  `json:"refresh_token"`
+	AuthTypeValue string  `json:"auth_type_value"`
+}
+
 type TokenOutputParse struct {
-	UsersId int `json:"users_id"`
-	RolesId int `json:"roles_id"`
+	UsersId  int           `json:"users_id"`
+	RolesId  int           `json:"roles_id"`
+	AuthType AuthTypeModel `json:"auth_types"`
+	TokenApi *string       `json:"token_api"`
 }
 
 type TokenOutputParseString struct {
@@ -24,4 +33,8 @@ type TokenOutputParseString struct {
 
 type TokenRefreshModel struct {
 	RefreshToken string `json:"refresh_token" binding:"required"`
+}
+
+type TokenAccessModel struct {
+	AccessToken string `json:"access_token" binding:"required"`
 }

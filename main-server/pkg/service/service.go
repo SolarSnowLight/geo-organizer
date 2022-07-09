@@ -1,41 +1,53 @@
 package service
 
 import (
-	"main-server/pkg/model"
+	articleModel "main-server/pkg/model/article"
+	userModel "main-server/pkg/model/user"
 	"main-server/pkg/repository"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Authorization interface {
-	CreateUser(user model.UserRegisterModel) (model.UserAuthDataModel, error)
-	LoginUser(user model.UserLoginModel) (model.UserAuthDataModel, error)
-	Refresh(token model.TokenRefreshModel) (model.UserAuthDataModel, error)
-	Logout(tokens model.TokenDataModel) (bool, error)
+	CreateUser(user userModel.UserRegisterModel) (userModel.UserAuthDataModel, error)
+	LoginUser(user userModel.UserLoginModel) (userModel.UserAuthDataModel, error)
+	LoginUserOAuth2(code string) (userModel.UserAuthDataModel, error)
+	Refresh(data userModel.TokenLogoutDataModel, refreshToken string) (userModel.UserAuthDataModel, error)
+	Logout(tokens userModel.TokenLogoutDataModel) (bool, error)
+	Activate(link string) (bool, error)
 
 	/*GenerateToken(email string, timeTTL time.Duration) (string, error)
 	GenerateTokenWithUuid(uuid string, timeTTL time.Duration) (string, error)*/
-	ParseToken(token, signingKey string) (model.TokenOutputParse, error)
+	ParseToken(token, signingKey string) (userModel.TokenOutputParse, error)
 }
 
-type TodoList interface {
-	Create(userId int, list model.TodoList) (int, error)
-	GetAll(userId int) ([]model.TodoList, error)
-	GetById(userId, listId int) (model.TodoList, error)
-	Delete(userId, listId int) error
-	Update(userId, listId int, input model.UpdateListInput) error
+type Token interface {
+	ParseToken(token, signingKey string) (userModel.TokenOutputParse, error)
+	ParseTokenWithoutValid(token, signingKey string) (userModel.TokenOutputParse, error)
 }
 
-type TodoItem interface {
+type AuthType interface {
+	GetAuthType(column, value string) (userModel.AuthTypeModel, error)
+}
+
+type User interface {
+	CreateArticle(c *gin.Context, title, text, tags string, files []articleModel.ArticlesFilesDBModel) (bool, error)
+	DeleteArticle(uuid articleModel.ArticleUuidModel, c *gin.Context) (articleModel.ArticleSuccessModel, error)
+	GetArticle(uuid articleModel.ArticleUuidModel, c *gin.Context) (articleModel.ArticleModel, error)
+	GetArticles(c *gin.Context) (articleModel.ArticlesModel, error)
 }
 
 type Service struct {
 	Authorization
-	TodoList
-	TodoItem
+	Token
+	User
 }
 
 func NewService(repos *repository.Repository) *Service {
+	tokenService := NewTokenService(repos.Role, repos.User, repos.AuthType)
 	return &Service{
-		Authorization: NewAuthService(repos.Authorization),
-		TodoList:      NewTodoListService(repos.TodoList),
+		Token:         tokenService,
+		Authorization: NewAuthService(repos.Authorization, *tokenService),
+		User:          NewUserService(repos.User),
 	}
 }

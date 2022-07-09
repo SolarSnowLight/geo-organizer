@@ -1,41 +1,58 @@
 package repository
 
 import (
-	"main-server/pkg/model"
+	articleModel "main-server/pkg/model/article"
+	rbacModel "main-server/pkg/model/rbac"
+	userModel "main-server/pkg/model/user"
 
+	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
+	"golang.org/x/oauth2"
 )
 
 type Authorization interface {
-	CreateUser(user model.UserRegisterModel) (model.UserAuthDataModel, error)
-	LoginUser(user model.UserLoginModel) (model.UserAuthDataModel, error)
-	Refresh(refreshToken model.TokenRefreshModel) (model.UserAuthDataModel, error)
-	Logout(tokens model.TokenDataModel) (bool, error)
+	CreateUser(user userModel.UserRegisterModel) (userModel.UserAuthDataModel, error)
+	LoginUser(user userModel.UserLoginModel) (userModel.UserAuthDataModel, error)
+	LoginUserOAuth2(code string) (userModel.UserAuthDataModel, error)
+	CreateUserOAuth2(user userModel.UserRegisterOAuth2Model, token *oauth2.Token) (userModel.UserAuthDataModel, error)
+	Refresh(data userModel.TokenLogoutDataModel, refreshToken string, token userModel.TokenOutputParse) (userModel.UserAuthDataModel, error)
+	Logout(tokens userModel.TokenLogoutDataModel) (bool, error)
+	Activate(link string) (bool, error)
 
-	GetUser(column, value string) (model.UserModel, error)
-	GetRole(column, value string) (model.RoleModel, error)
+	GetUser(column, value string) (userModel.UserModel, error)
+	GetRole(column, value string) (rbacModel.RoleModel, error)
 }
 
-type TodoList interface {
-	Create(userId int, list model.TodoList) (int, error)
-	GetAll(userId int) ([]model.TodoList, error)
-	GetById(userId, listId int) (model.TodoList, error)
-	Delete(userId, listId int) error
-	Update(userId, listId int, input model.UpdateListInput) error
+type Role interface {
+	GetRole(column, value interface{}) (rbacModel.RoleModel, error)
 }
 
-type TodoItem interface {
+type User interface {
+	GetUser(column, value interface{}) (userModel.UserModel, error)
+	CreateArticle(c *gin.Context, title, text, tags string, files []articleModel.ArticlesFilesDBModel) (bool, error)
+	DeleteArticle(uuid articleModel.ArticleUuidModel, c *gin.Context) (articleModel.ArticleSuccessModel, error)
+	GetArticle(uuid articleModel.ArticleUuidModel, c *gin.Context) (articleModel.ArticleModel, error)
+	GetArticles(c *gin.Context) (articleModel.ArticlesModel, error)
+}
+
+type AuthType interface {
+	GetAuthType(column, value interface{}) (userModel.AuthTypeModel, error)
 }
 
 type Repository struct {
 	Authorization
-	TodoList
-	TodoItem
+	Role
+	User
+	AuthType
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
+	user := NewUserPostgres(db)
+
 	return &Repository{
-		Authorization: NewAuthPostgres(db),
-		TodoList:      NewTodoListPostgres(db),
+		Authorization: NewAuthPostgres(db, *user),
+		Role:          NewRolePostgres(db),
+		User:          user,
+		AuthType:      NewAuthTypePostgres(db),
 	}
 }

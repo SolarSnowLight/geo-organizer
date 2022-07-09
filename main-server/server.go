@@ -1,4 +1,4 @@
-package mainserver
+package todo
 
 import (
 	"context"
@@ -6,12 +6,16 @@ import (
 	"time"
 )
 
-// Структура для работы с HTTP-сервером
+/*
+* Structure for working with an HTTP server
+ */
 type Server struct {
 	httpServer *http.Server
 }
 
-// Запуск сервера
+/*
+* Server startup function
+ */
 func (s *Server) Run(port string, handler http.Handler) error {
 	s.httpServer = &http.Server{
 		Addr:           ":" + port,
@@ -24,7 +28,9 @@ func (s *Server) Run(port string, handler http.Handler) error {
 	return s.httpServer.ListenAndServe()
 }
 
-// Прекращение работы сервера
+/*
+* Server shutdown function
+ */
 func (s *Server) Shutdown(ctx context.Context) error {
 	return s.httpServer.Shutdown(ctx)
 }
