@@ -1,0 +1,153 @@
+.taskbar
+  //position: fixed
+  z-index: 2
+  height: 100vh
+  background: #FBFBFB
+  width: 407px
+  min-width: 407px
+  display: flex
+  flex-direction: column
+  align-items: center
+  padding: 64px 32px 32px
+  -webkit-box-sizing: border-box
+  -moz-box-sizing: border-box
+  box-sizing: border-box
+  box-shadow: 4px 0 23px rgba(0, 0, 0, 0.25)
+
+  img
+    height: 43px
+    width: 43px
+    margin-bottom: 24px
+    filter: drop-shadow(0px 3px 8px rgba(0, 0, 0, 0.25))
+
+  h1
+    font-size: 24px
+    line-height: 24px
+    font-weight: 500
+    margin-block: 0
+    margin-bottom: 24px
+
+.search-input
+  background: transparent
+  border: 1px solid #9B9B9B
+  width: 343px
+  height: 40px
+  display: flex
+  align-items: center
+  border-radius: 30px
+  padding: 8px 16px
+  box-sizing: border-box
+  -webkit-box-sizing: border-box
+  -moz-box-sizing: border-box
+  margin-bottom: 24px
+
+  button
+    background: transparent
+    border: none
+    outline: none
+    display: flex
+    align-content: center
+    flex-direction: row
+    width: 24px
+    height: 24px
+    margin-right: 10px
+    padding: 0
+
+    img
+      width: 24px
+      height: 24px
+      margin-bottom: 0
+
+  input
+    background: transparent
+    border: none
+    outline: none
+    font-size: 18px
+    line-height: 18px
+    font-weight: 400
+    padding: 0
+
+.tabs-switch
+  display: grid
+  align-items: center
+  width: 343px
+  height: 40px
+  background: #E8EAED
+  border-radius: 52px
+  justify-content: space-around
+  box-sizing: border-box
+  margin-bottom: 24px
+
+  &__item
+    background: transparent
+    border: none
+    outline: none
+    font-size: 16px
+    line-height: 16px
+    font-weight: 400
+    height: 32px
+    border-radius: 52px
+    box-sizing: border-box
+    padding: 8px
+
+    &:hover
+      cursor: pointer
+
+.taskitem
+  &__wrapper
+    width: 100%
+    background: #E8EAED
+    border-radius: 8px
+    display: flex
+    justify-content: space-between
+    margin-top: 24px
+    padding: 8px
+    box-sizing: border-box
+    //input[type=checkbox]
+    //  visibility: hidden
+    //  height: 24px
+    //  width: 24px
+    //  margin: 0
+    //label
+    //  height: 24px
+    //  width: 24px
+    //  border-radius: 3px
+    //  border: 2px solid #9B9B9B
+    //  position: relative
+    //label:after
+    //  width: 24px
+    //  height: 24px
+    //  background-color: #9B9B9B
+    //  opacity: 0
+    //  position: absolute
+    //  top: 0
+    //  left: 0
+    //  padding: 1px 4px
+    //  box-sizing: border-box
+    //  content: url("data:image/svg+xml,%3Csvg width='16' height='11' viewBox='0 0 16 11' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M14.947 0.479107C15.2844 0.851254 15.2844 1.45462 14.947 1.82677L6.88299 10.7209C6.54558 11.093 5.99852 11.093 5.66111 10.7209L1.05311 5.63853C0.715696 5.26639 0.715696 4.66302 1.05311 4.29087C1.39052 3.91873 1.93758 3.91873 2.27499 4.29087L6.27205 8.69939L13.7251 0.479107C14.0625 0.10696 14.6096 0.10696 14.947 0.479107Z' fill='%23FBFBFB'/%3E%3C/svg%3E%0A")
+    //input[type=checkbox]:checked+label:after
+    //  opacity: 1
+  &__infowrapper
+    display: flex
+    flex-direction: column
+    width: 70%
+  &__address
+    color: #9B9B9B
+    font-size: 12px
+    font-weight: 500
+    line-height: 12px
+    margin-top: 8px
+  &__title
+    font-size: 18px
+    font-weight: 600
+    line-height: 18px
+  &__description
+    margin-top: 8px
+    font-size: 14px
+    font-weight: 400
+    line-height: 14px
+  &__time
+    color: #9B9B9B
+    font-size: 12px
+    line-height: 12px
+    font-weight: 500

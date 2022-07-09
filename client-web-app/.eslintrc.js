@@ -19,8 +19,8 @@ module.exports = {
       2,
       { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
     ],
-    'no-unused-vars': 'error',
     'linebreak-style': 'off',
+    'no-unused-vars': 'error',
     'import/no-unresolved': 'off',
     'import/extensions': ['error', 'never', { ignorePackages: true }],
     '@typescript-eslint/naming-convention': [
@@ -34,5 +34,8 @@ module.exports = {
         },
       },
     ],
+  },
+  globals: {
+    JSX: true,
   },
 };

@@ -12,6 +12,7 @@ export interface Task {
   weekDay?: string[];
   time: string;
   completed: boolean;
+  address: string;
 }
 export interface TasksState {
   data: Task[];

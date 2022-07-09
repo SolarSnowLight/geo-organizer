@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CustomMap from './components/CustomMap';
-import NewTaskMenu from './components/NewTaskMenu/NewTaskMenu';
+import CustomMap from '../../components/CustomMap';
+import NewTaskMenu from '../../components/NewTaskMenu/NewTaskMenu';
 import s from './map.module.sass';
-import TaskList from './components/TaskList/TaskList';
+import TaskList from '../../components/TaskList/TaskList';
 import useTypedSelector from '../../Store/hooks/useTypedSelector';
 import useActions from '../../Store/hooks/useActions';
 import { BarEnum } from '../../Store/App/appSlice';

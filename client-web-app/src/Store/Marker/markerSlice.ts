@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { MarkerType } from '../../pages/mapPage/components/CustomMap';
+import { MarkerType } from '../../components/CustomMap';
 
 export interface MarkerState {
   data: MarkerType | undefined;

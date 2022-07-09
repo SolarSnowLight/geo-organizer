@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { GeocodeType } from '../../types/GeocodeTypes';
-import { MarkerType } from '../../pages/mapPage/components/CustomMap';
+import { MarkerType } from '../../components/CustomMap';
 import { addMarker } from '../Marker/markerSlice';
 
 export interface AddressState {
@@ -32,7 +32,7 @@ export const {
   deleteAddress,
 } = addressSlice.actions;
 
-export const fetchAddress = createAsyncThunk('address/fetchAddress', async (latlng:MarkerType, { dispatch }) => {
+export const fetchAddress = createAsyncThunk('address/fetchAddress', async (latlng: MarkerType, { dispatch }) => {
   dispatch(addMarker(latlng));
   try {
     const response = await axios.get<GeocodeType>(
